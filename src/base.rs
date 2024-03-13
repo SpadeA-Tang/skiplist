@@ -2340,7 +2340,11 @@ where
     }
 
     /// Make iterator point to the element whose key is larger or equal to the target
-    pub fn seek(&mut self, target: &K, guard: &Guard) {
+    pub fn seek<Q>(&mut self, target: &Q, guard: &Guard)
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
         self.list.as_ref().check_guard(guard);
         if let Some(n) = self.cursor.take() {
             n.release(guard);
@@ -2352,7 +2356,11 @@ where
     }
 
     /// Make iterator point to the element whose key is less than the target
-    pub fn seek_for_prev(&mut self, target: &K, guard: &Guard) {
+    pub fn seek_for_prev<Q>(&mut self, target: &Q, guard: &Guard)
+    where
+        K: Borrow<Q>,
+        Q: Ord + ?Sized,
+    {
         self.list.as_ref().check_guard(guard);
         if let Some(n) = self.cursor.take() {
             n.release(guard);
